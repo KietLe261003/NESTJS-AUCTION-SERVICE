@@ -12,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       host: 'localhost',
       port: 3306,
       username: 'auction',
-      password: '@GiaHau123',
+      password: '@Giahau123',
       database: 'auction_event_db',
       entities: [],
       synchronize: true,
