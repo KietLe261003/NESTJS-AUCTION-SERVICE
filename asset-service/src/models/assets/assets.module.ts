@@ -5,14 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Asset } from './entities/asset.entity';
 import { AssetStatusesModule } from '../asset-statuses/asset-statuses.module';
 import { AssetTypesModule } from '../asset-types/asset-types.module';
-import { GoogleDriveProviderModule } from 'src/providers/api/google/drive/provider.module';
+import { FileModule } from 'src/services/file/file.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Asset]),
     AssetStatusesModule,
     AssetTypesModule,
-    GoogleDriveProviderModule
+    FileModule
   ],
   controllers: [AssetsController],
   providers: [AssetsService],

@@ -25,5 +25,9 @@ export class GoogleDriveConfigService {
   get refreshToken(): string {
     return this.configService.get<string>('googleDrive.refreshToken')
   }
+
+  get auctionUploadsFodlerId(): string {
+    return this.configService.get<string>('googleDrive.auctionUploadsFodlerId')
+  }
 }
 
