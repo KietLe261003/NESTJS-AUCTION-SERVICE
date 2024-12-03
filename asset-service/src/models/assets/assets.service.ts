@@ -19,7 +19,6 @@ export class AssetsService {
     private readonly fileService: FileService
   ) { }
 
-
   async create(createAssetDto: CreateAssetDto, file: Express.Multer.File) {
     try {
       if (!file || !file.buffer) {
@@ -50,7 +49,6 @@ export class AssetsService {
       throw error;
     }
   }
-
 
   async findAll(page: number = 1, limit: number = 10, filter: any = {}, order: any = {}): Promise<{ code: number; message: string; metadata: any }> {
     const [result, total] = await this.assetRepository.findAndCount({
