@@ -3,7 +3,7 @@ import { StaffEventService } from './staff-event.service';
 import { CreateStaffEventDto } from './dto/create-staff-event.dto';
 import { UpdateStaffEventDto } from './dto/update-staff-event.dto';
 
-@Controller('staff-event')
+@Controller('event-management-service/staff-event')
 export class StaffEventController {
   constructor(private readonly staffEventService: StaffEventService) { }
 
