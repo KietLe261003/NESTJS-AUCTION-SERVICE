@@ -4,7 +4,7 @@ import { CreateAuctionSessionDto } from './dto/create-auction-session.dto';
 import { UpdateAuctionSessionDto } from './dto/update-auction-session.dto';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
-@Controller('auction-session')
+@Controller('auction-management-service/auction-session')
 export class AuctionSessionController {
   constructor(private readonly auctionSessionService: AuctionSessionService) { }
 

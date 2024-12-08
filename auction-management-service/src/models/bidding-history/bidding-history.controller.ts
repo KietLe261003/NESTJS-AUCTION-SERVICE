@@ -3,7 +3,7 @@ import { BiddingHistoryService } from './bidding-history.service';
 import { CreateBiddingHistoryDto } from './dto/create-bidding-history.dto';
 import { UpdateBiddingHistoryDto } from './dto/update-bidding-history.dto';
 
-@Controller('bidding-history')
+@Controller('auction-management-service/bidding-history')
 export class BiddingHistoryController {
   constructor(private readonly biddingHistoryService: BiddingHistoryService) { }
 

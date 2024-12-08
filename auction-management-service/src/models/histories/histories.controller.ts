@@ -3,7 +3,7 @@ import { HistoriesService } from './histories.service';
 import { CreateHistoryDto } from './dto/create-history.dto';
 import { UpdateHistoryDto } from './dto/update-history.dto';
 
-@Controller('histories')
+@Controller('auction-management-service/histories')
 export class HistoriesController {
   constructor(private readonly historiesService: HistoriesService) { }
 

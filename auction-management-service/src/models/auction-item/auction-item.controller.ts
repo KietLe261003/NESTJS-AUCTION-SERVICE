@@ -6,7 +6,7 @@ import { UpdateAuctionItemDto } from './dto/update-auction-item.dto';
 import { ApiOperation, ApiTags, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 @ApiTags('Auction Item')
-@Controller('auction-item')
+@Controller('auction-management-service/auction-item')
 export class AuctionItemController {
   constructor(private readonly auctionItemService: AuctionItemService) { }
 

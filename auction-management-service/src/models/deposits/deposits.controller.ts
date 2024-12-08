@@ -4,7 +4,7 @@ import { CreateDepositDto } from './dto/create-deposit.dto';
 import { UpdateDepositDto } from './dto/update-deposit.dto';
 import { Code } from 'typeorm';
 
-@Controller('deposits')
+@Controller('auction-management-service/deposits')
 export class DepositsController {
   constructor(private readonly depositsService: DepositsService) { }
 
