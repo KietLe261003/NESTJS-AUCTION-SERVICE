@@ -5,7 +5,7 @@ import { UpdateAssetDto } from './dto/update-asset.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiBody, ApiConsumes } from '@nestjs/swagger';
 
-@Controller('assets')
+@Controller('asset-service/assets')
 export class AssetsController {
   constructor(
     private readonly assetsService: AssetsService

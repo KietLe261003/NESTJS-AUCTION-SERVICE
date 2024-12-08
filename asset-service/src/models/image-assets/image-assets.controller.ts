@@ -4,7 +4,7 @@ import { CreateImageAssetDto } from './dto/create-image-asset.dto';
 import { UpdateImageAssetDto } from './dto/update-image-asset.dto';
 import { ExpressAdapter } from '@nestjs/platform-express';
 
-@Controller('image-assets')
+@Controller('asset-service/image-assets')
 export class ImageAssetsController {
   constructor(private readonly imageAssetsService: ImageAssetsService) { }
 

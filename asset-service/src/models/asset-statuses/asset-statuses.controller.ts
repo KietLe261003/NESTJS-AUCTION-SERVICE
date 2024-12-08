@@ -7,7 +7,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AssetStatus } from './entities/asset-status.entity';
 
 @ApiTags('Asset Statuses')
-@Controller('asset-statuses')
+@Controller('asset-service/asset-statuses')
 export class AssetStatusesController {
   constructor(private readonly assetStatusesService: AssetStatusesService) { }
 

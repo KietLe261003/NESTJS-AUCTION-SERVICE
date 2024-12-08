@@ -1,9 +1,10 @@
+
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class StaffEvent {
   @PrimaryGeneratedColumn()
-  staffEventId: number
+  staffEventId: number;
 
   @Column()
   userId: number;
@@ -17,9 +18,13 @@ export class StaffEvent {
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
+
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
+
   @Column('timestamp', { nullable: true })
   deleted_at: Date;
+
 }
+

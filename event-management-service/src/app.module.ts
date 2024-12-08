@@ -4,18 +4,19 @@ import { AppService } from './app.service';
 import { EventModule } from './event/event.module';
 import { StaffEventModule } from './staff-event/staff-event.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { StaffEvent } from './staff-event/entities/staff-event.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'mariadb',
       host: 'localhost',
       port: 3306,
       username: 'auction',
       password: '@Giahau123',
       database: 'auction_event_db',
-      entities: [],
       synchronize: true,
+      entities: [Event, StaffEvent]
     }),
     EventModule,
     StaffEventModule
