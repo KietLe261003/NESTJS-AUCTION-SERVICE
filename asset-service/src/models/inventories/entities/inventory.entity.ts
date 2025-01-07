@@ -1,7 +1,7 @@
 
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
-@Entity('Inventories')
+@Entity()
 export class Inventory {
   @PrimaryGeneratedColumn()
   inventoryID: number;

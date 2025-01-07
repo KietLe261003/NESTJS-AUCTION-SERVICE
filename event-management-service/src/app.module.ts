@@ -12,8 +12,8 @@ import { StaffEvent } from './staff-event/entities/staff-event.entity';
       type: 'mariadb',
       host: 'localhost',
       port: 3306,
-      username: 'auction',
-      password: '@Giahau123',
+      username: 'root',
+      password: '12345678',
       database: 'auction_event_db',
       synchronize: true,
       entities: [Event, StaffEvent]
