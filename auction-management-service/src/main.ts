@@ -7,14 +7,6 @@ import { HttpExceptionFilter } from './common/exceptions/http.exception';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {});
-  app.enableCors({
-    origin: [
-      'http://localhost:3001',
-      'https://apidog.com',
-      'http://192.168.1.190:3001',
-      'http://localhost:5173',
-    ],
-  });
   // app.useGlobalFilters(new HttpExceptionFilter())
 
   // config swagger
