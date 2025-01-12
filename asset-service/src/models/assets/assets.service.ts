@@ -20,6 +20,7 @@ export class AssetsService {
   ) { }
 
   async create(createAssetDto: CreateAssetDto, file: Express.Multer.File) {
+    console.log(file)
     try {
       if (!file || !file.buffer) {
         throw new Error('Invalid file buffer');
@@ -37,7 +38,7 @@ export class AssetsService {
       const created = this.assetRepository.create(createAssetDto);
       const savedAsset = await this.assetRepository.save(created);
 
-      savedAsset.mainImage = `uploads/${filename}`
+      savedAsset.mainImage = `${process.env.APP_SERVICE_URL}/uploads/${filename}`
 
       return {
         code: 201,
@@ -59,7 +60,7 @@ export class AssetsService {
     });
 
     for (let i = 0; i < result.length; i++) {
-      result[i].mainImage = `uploads/${result[i].mainImage}`
+      result[i].mainImage = `${process.env.APP_SERVICE_URL}/uploads/${result[i].mainImage}`
     }
 
     return {
@@ -81,7 +82,7 @@ export class AssetsService {
       throw new NotFoundException(`Asset with ID ${id} not found`);
     }
 
-    asset.mainImage = `uploads/${asset.mainImage}`
+    asset.mainImage = `${process.env.APP_SERVICE_URL}/uploads/${asset.mainImage}`
     return {
       code: 200,
       message: 'Asset retrieved successfully',

@@ -7,6 +7,16 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.enableCors({
+    origin: [
+      'http://localhost:3001',
+      'https://apidog.com',
+      'http://192.168.1.190:3001',
+      'http://localhost:5173'
+    ],
+  })
+
   // config swagger
   const config = new DocumentBuilder()
     .setTitle('ASSET SERVICE')

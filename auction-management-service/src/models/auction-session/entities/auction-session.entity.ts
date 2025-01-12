@@ -12,7 +12,7 @@ export class AuctionSession {
   startTime: Date;
 
   @Column()
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   endTime: Date;
 
   @Column()
