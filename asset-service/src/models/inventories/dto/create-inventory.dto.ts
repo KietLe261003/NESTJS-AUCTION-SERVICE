@@ -15,7 +15,7 @@ export class CreateInventoryDto {
   @IsNotEmpty()
   @ApiProperty({
     description: 'The entry time of the inventory',
-    example: Date.now()
+    example: new Date()
   })
   entryTime: Date;
 
@@ -23,7 +23,7 @@ export class CreateInventoryDto {
   @IsOptional()
   @ApiProperty({
     description: 'The exit time of the inventory',
-    example: Date.now()
+    example: new Date()
   })
   exitTime?: Date;
 

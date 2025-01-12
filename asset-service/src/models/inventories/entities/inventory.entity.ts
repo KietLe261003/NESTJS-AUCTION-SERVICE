@@ -1,5 +1,5 @@
 
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Inventory {
@@ -9,10 +9,10 @@ export class Inventory {
   @Column()
   quantity: number;
 
-  @Column({ type: 'timestamp' })
+  @Column('timestamp')
   entryTime: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column('timestamp', { nullable: true }) // Để giá trị null nếu không có thời gian cụ thể
   exitTime: Date;
 
   @Column()
@@ -32,6 +32,5 @@ export class Inventory {
 
   @Column('timestamp', { nullable: true })
   deleted_at: Date;
-
 }
 
