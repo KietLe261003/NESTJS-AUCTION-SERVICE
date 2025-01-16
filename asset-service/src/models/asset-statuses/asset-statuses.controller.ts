@@ -1,5 +1,5 @@
 
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { AssetStatusesService } from './asset-statuses.service';
 import { CreateAssetStatusDto } from './dto/create-asset-status.dto';
 import { UpdateAssetStatusDto } from './dto/update-asset-status.dto';
@@ -95,7 +95,7 @@ export class AssetStatusesController {
     return this.assetStatusesService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @ApiOperation({ summary: 'Update an asset status by ID' })
   @ApiResponse({
     status: 200,

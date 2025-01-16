@@ -91,23 +91,24 @@ export class AssetsService {
   }
 
   async update(id: number, updateAssetDto: UpdateAssetDto, file: Express.Multer.File): Promise<{ code: number; message: string; metadata: Asset }> {
+    const asset = await this.assetRepository.findOne({ where: { assetID: id } })
     if (file) {
-      await this.fileService.deleteFile(updateAssetDto.mainImage)
       const filename = await this.fileService.uploadFile(file)
+      await this.fileService.deleteFile(asset.mainImage)
       updateAssetDto.mainImage = filename
     }
-    const result = await this.assetRepository.update({ assetTypeID: id }, updateAssetDto);
+    const result = await this.assetRepository.update({ assetID: id }, updateAssetDto);
 
     if (result.affected === 0) {
-      throw new NotFoundException(`AssetType with ID ${id} not found`);
+      throw new NotFoundException(`Asset with ID ${id} not found`);
     }
 
-    const updatedAssetType = await this.assetRepository.findOne({ where: { assetTypeID: id } });
+    const updatedAsset = await this.assetRepository.findOne({ where: { assetTypeID: id } });
 
     return {
       code: 200,
-      message: 'Asset Type updated successfully',
-      metadata: updatedAssetType,
+      message: 'Asset updated successfully',
+      metadata: updatedAsset,
     };
   }
 

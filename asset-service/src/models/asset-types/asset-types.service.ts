@@ -1,5 +1,5 @@
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAssetTypeDto } from './dto/create-asset-type.dto';
 import { UpdateAssetTypeDto } from './dto/update-asset-type.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -54,14 +54,35 @@ export class AssetTypesService {
     };
   }
 
-  async update(id: number, updateAssetTypeDto: UpdateAssetTypeDto): Promise<{ code: number; message: string; metadata: AssetType }> {
-    const result = await this.assetTypesRepository.update({ assetTypeID: id }, updateAssetTypeDto);
+  async update(
+    id: number,
+    updateAssetTypeDto: UpdateAssetTypeDto,
+  ): Promise<{ code: number; message: string; metadata: AssetType }> {
+    // Lọc các giá trị hợp lệ (loại bỏ undefined và null)
+    const updateData = Object.fromEntries(
+      Object.entries(updateAssetTypeDto).filter(([_, value]) => value !== undefined && value !== null)
+    );
 
+    // Kiểm tra nếu không có giá trị hợp lệ để cập nhật
+    if (Object.keys(updateData).length === 0) {
+      throw new BadRequestException('No valid update values provided.');
+    }
+
+    // Thực hiện cập nhật
+    const result = await this.assetTypesRepository.update({ assetTypeID: id }, updateData);
+
+    // Nếu không tìm thấy ID để cập nhật
     if (result.affected === 0) {
       throw new NotFoundException(`AssetType with ID ${id} not found`);
     }
 
+    // Lấy thông tin đối tượng đã cập nhật
     const updatedAssetType = await this.assetTypesRepository.findOne({ where: { assetTypeID: id } });
+
+    // Kiểm tra nếu đối tượng đã bị xóa hoặc không tồn tại sau khi cập nhật
+    if (!updatedAssetType) {
+      throw new NotFoundException(`AssetType with ID ${id} no longer exists.`);
+    }
 
     return {
       code: 200,
@@ -69,7 +90,6 @@ export class AssetTypesService {
       metadata: updatedAssetType,
     };
   }
-
   async remove(id: number): Promise<{ code: number; message: string; metadata: null }> {
     const result = await this.assetTypesRepository.delete({ assetTypeID: id });
 

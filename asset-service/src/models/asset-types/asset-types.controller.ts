@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { AssetTypesService } from './asset-types.service';
 import { CreateAssetTypeDto } from './dto/create-asset-type.dto';
 import { UpdateAssetTypeDto } from './dto/update-asset-type.dto';
@@ -22,7 +22,7 @@ export class AssetTypesController {
     return this.assetTypesService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(@Param('id') id: number, @Body() updateAssetTypeDto: UpdateAssetTypeDto) {
     return this.assetTypesService.update(id, updateAssetTypeDto);
   }
