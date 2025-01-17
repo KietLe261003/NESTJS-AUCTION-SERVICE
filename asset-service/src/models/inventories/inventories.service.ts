@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateInventoryDto } from './dto/create-inventory.dto';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -68,6 +68,16 @@ export class InventoriesService {
   }
 
   async update(id: number, updateInventoryDto: UpdateInventoryDto): Promise<{ code: number; message: string; metadata: Inventory }> {
+    // Lọc các giá trị hợp lệ (loại bỏ undefined và null)
+    const updateData = Object.fromEntries(
+      Object.entries(updateInventoryDto).filter(([_, value]) => value !== undefined && value !== null)
+    );
+
+    // Kiểm tra nếu không có giá trị hợp lệ để cập nhật
+    if (Object.keys(updateData).length === 0) {
+      throw new BadRequestException('No valid update values provided.');
+    }
+
     const result = await this.inventoriesRepository.update({ inventoryID: id }, updateInventoryDto);
 
     if (result.affected === 0) {
