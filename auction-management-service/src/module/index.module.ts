@@ -14,4 +14,4 @@ import { DepositsModule } from "./deposits/deposits.module";
     DepositsModule
   ]
 })
-export class ModelModule { }
+export class FeaturesModule { }

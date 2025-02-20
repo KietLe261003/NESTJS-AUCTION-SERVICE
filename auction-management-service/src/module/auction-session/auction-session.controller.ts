@@ -3,6 +3,7 @@ import { AuctionSessionService } from './auction-session.service';
 import { CreateAuctionSessionDto } from './dto/create-auction-session.dto';
 import { UpdateAuctionSessionDto } from './dto/update-auction-session.dto';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { AuctionSession } from './entities/auction-session.entity';
 
 @Controller('auction-management-service/auction-session')
 export class AuctionSessionController {
@@ -41,7 +42,7 @@ export class AuctionSessionController {
     required: false,
     type: String,
     description: 'JSON stringified object for filtering results by specific fields',
-    example: '{"eventID": 1, "delflag": false}',
+    example: '{ "isDelete": false}',
   })
   @ApiQuery({
     name: 'order',
@@ -55,36 +56,7 @@ export class AuctionSessionController {
     required: false,
     type: String,
     description: 'JSON stringified array of fields to include in the result',
-    example: '["auctionSessionID","startTime","endTime","eventID"]',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Successfully retrieved list of auction sessions',
-    schema: {
-      example: {
-        code: 200,
-        message: 'OK',
-        metadata: {
-          auctionSessions: [
-            {
-              auctionSessionID: 1,
-              startTime: '2024-12-01T10:00:00.000Z',
-              endTime: '2024-12-01T12:00:00.000Z',
-              eventID: 1,
-            },
-            {
-              auctionSessionID: 2,
-              startTime: '2024-12-01T13:00:00.000Z',
-              endTime: '2024-12-01T15:00:00.000Z',
-              eventID: 2,
-            }
-          ],
-          total: 50,
-          page: 1,
-          lastPage: 5,
-        },
-      },
-    },
+    example: '["id","name","startTime", "endTime", "paymentDeadline"]',
   })
   async findAll(
     @Query('page') page: number = 1,
