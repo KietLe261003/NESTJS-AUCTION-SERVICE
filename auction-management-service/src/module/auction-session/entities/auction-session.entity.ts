@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { AuctionSessionHistory } from "src/module/auction-session-history/entities/auction-session-history.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class AuctionSession {
@@ -26,7 +27,7 @@ export class AuctionSession {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   bidStep: number; // Bước giá tối thiểu
 
-  @Column({default:false})
+  @Column({ default: false })
   isDelete: boolean
 
   @CreateDateColumn()
@@ -37,4 +38,7 @@ export class AuctionSession {
 
   @DeleteDateColumn()
   deletedAt: Date
+
+  @OneToMany(() => AuctionSessionHistory, (auctionSessionHistory) => auctionSessionHistory.auctionSession)
+  history: AuctionSessionHistory[]
 }

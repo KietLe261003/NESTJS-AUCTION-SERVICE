@@ -2,8 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseFilters } 
 import { AuctionSessionService } from './auction-session.service';
 import { CreateAuctionSessionDto } from './dto/create-auction-session.dto';
 import { UpdateAuctionSessionDto } from './dto/update-auction-session.dto';
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
-import { AuctionSession } from './entities/auction-session.entity';
+import { ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 @Controller('auction-management-service/auction-session')
 export class AuctionSessionController {

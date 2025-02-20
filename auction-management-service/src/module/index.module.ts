@@ -4,6 +4,7 @@ import { AuctionSessionModule } from "./auction-session/auction-session.module";
 import { AuctionItemModule } from "./auction-item/auction-item.module";
 import { HistoriesModule } from "./histories/histories.module";
 import { DepositsModule } from "./deposits/deposits.module";
+import { AuctionSessionHistoryModule } from './auction-session-history/auction-session-history.module';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { DepositsModule } from "./deposits/deposits.module";
     AuctionSessionModule,
     AuctionItemModule,
     HistoriesModule,
-    DepositsModule
+    DepositsModule,
+    AuctionSessionHistoryModule
   ]
 })
 export class FeaturesModule { }
