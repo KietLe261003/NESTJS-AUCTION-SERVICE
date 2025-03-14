@@ -55,7 +55,7 @@ export class AuctionSessionController {
     required: false,
     type: String,
     description: 'JSON stringified array of fields to include in the result',
-    example: '["id","name","startTime", "endTime", "paymentDeadline"]',
+    example: '["id","name","startTime", "endTime", "paymentDeadline", "assetId"]',
   })
   async findAll(
     @Query('page') page: number = 1,
