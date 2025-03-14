@@ -39,13 +39,13 @@ export class AuctionSessionHistoryController {
     description: "Number of records per page (default: 10)",
     example: 10,
   })
-  @ApiQuery({
-    name: 'filter',
-    required: false,
-    type: String,
-    description: 'JSON stringified object for filtering results by specific fields',
-    example: '{ "auctionSessionId": "1"}',
-  })
+  // @ApiQuery({
+  //   name: 'filter',
+  //   required: false,
+  //   type: String,
+  //   description: 'JSON stringified object for filtering results by specific fields',
+  //   example: '{ "auctionSessionId": "1"}',
+  // })
   @ApiQuery({
     name: 'order',
     required: false,

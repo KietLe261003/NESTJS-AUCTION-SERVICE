@@ -33,7 +33,7 @@ export class AuctionSessionHistoryService {
         take: limit,
         where: filter,
         order: order,
-        select: select,
+        //select: select,
         relations: ["auctionSession"],
       }),
       this.auctionSessionHistoryRepository.count({ where: filter }),

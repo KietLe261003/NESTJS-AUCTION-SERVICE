@@ -35,7 +35,7 @@ export class AuctionSessionService {
   }
 
   async findOne(id: number): Promise<AuctionSession> {
-    const auction = await this.auctionRepository.findOne({ where: { id } });
+    const auction = await this.auctionRepository.findOne({ where: { id },relations:{history:true} });
     if (!auction) {
       throw new HttpException(
         { code: 404, message: `Auction with ID ${id} not found`, metadata: null },
