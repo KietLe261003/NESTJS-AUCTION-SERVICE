@@ -7,7 +7,7 @@ import { FeaturesModule } from './module/index.module';
   imports: [
     AppConfigModule,
     MariadbDatabaseProviderModule,
-    FeaturesModule
+    FeaturesModule,
   ],
   controllers: [],
   providers: [],

@@ -35,7 +35,7 @@ export class AuctionSessionService {
   }
 
   async findOne(id: number): Promise<AuctionSession> {
-    const auction = await this.auctionRepository.findOne({ where: { id },relations:{history:true} });
+    const auction = await this.auctionRepository.findOne({ where: { id }, relations: { history: true, users: true } });
     if (!auction) {
       throw new HttpException(
         { code: 404, message: `Auction with ID ${id} not found`, metadata: null },
@@ -59,6 +59,26 @@ export class AuctionSessionService {
       );
     }
     return true;
+  }
+
+  async registerUser(auctionId: number, userId: number) {
+    const auction = await this.auctionRepository.findOne({ where: { id: auctionId }, relations: ['users'] });
+    if (!auction) {
+      throw new HttpException(
+        { code: 404, message: `Auction with ID ${auctionId} not found`, metadata: null },
+        HttpStatus.NOT_FOUND
+      );
+    }
+
+    const existingUser = auction.users.find(user => user.id === userId);
+    if (existingUser) {
+      throw new HttpException(
+        { code: 400, message: `User with ID ${userId} already registered`, metadata: null },
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    auction.users.push({ userId: userId } as any);
+    return await this.auctionRepository.save(auction);
   }
 }
 

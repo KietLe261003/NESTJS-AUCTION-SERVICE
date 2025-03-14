@@ -1,4 +1,5 @@
 import { AuctionSessionHistory } from "src/module/auction-session-history/entities/auction-session-history.entity";
+import { AuctionUser } from "src/module/auction-users/entities/auction-user.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
@@ -41,4 +42,7 @@ export class AuctionSession {
 
   @OneToMany(() => AuctionSessionHistory, (auctionSessionHistory) => auctionSessionHistory.auctionSession)
   history: AuctionSessionHistory[]
+
+  @OneToMany(() => AuctionUser, (auctionUser) => auctionUser.auctionSession, { cascade: true })
+  users: AuctionUser[]
 }

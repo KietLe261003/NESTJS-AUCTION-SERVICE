@@ -94,6 +94,19 @@ export class AuctionSessionController {
     }
   }
 
+  @Post(':id/register/:userId')
+  async registerUser(@Param('id') id: number, @Param('userId') userId: number): Promise<ApiResponseMeta> {
+    const auctionSession = await this.auctionSessionService.registerUser(id, userId);
+    return {
+      code: 200,
+      message: 'OK',
+      metadata: {
+        auctionSession: auctionSession
+      }
+    }
+  }
+
+
   @Patch(':id')
   async update(@Param('id') id: number, @Body() updateAuctionSessionDto: UpdateAuctionSessionDto): Promise<ApiResponseMeta> {
     const updatedAuctionSession = await this.auctionSessionService.update(id, updateAuctionSessionDto);
@@ -115,4 +128,6 @@ export class AuctionSessionController {
       metadata: null
     }
   }
+
+
 }
