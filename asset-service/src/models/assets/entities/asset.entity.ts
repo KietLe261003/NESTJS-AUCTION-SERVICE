@@ -7,6 +7,9 @@ export class Asset {
   assetID: number;
 
   @Column()
+  userID: number; // must check at api-gateway
+
+  @Column()
   assetName: string;
 
   @Column()
@@ -17,6 +20,9 @@ export class Asset {
 
   @Column()
   assetPrice: number;
+
+  @Column()
+  address: string;
 
   @Column()
   inspectorID: number; // must check at api-gateway

@@ -55,6 +55,16 @@ export class AssetsController {
           description: 'The assetStatusID of the asset',
           example: '1',
         },
+        userID: {
+          type: 'number',
+          description: 'The userID of the asset',
+          example: '1',
+        },
+        address: {
+          type: 'string',
+          description: 'The address of the asset',
+          example: 'address',
+        },
       },
     },
   })

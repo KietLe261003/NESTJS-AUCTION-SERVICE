@@ -58,5 +58,21 @@ export class CreateAssetDto {
     example: 1
   })
   assetStatusID: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'The user ID of the asset',
+    example: 1
+  })
+  userId: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'The address of the asset',
+    example: 'Ha Noi'
+  })
+  address: string;
 }
 
