@@ -27,7 +27,7 @@ export class AuctionSessionService {
         take: limit,
         where: filter,
         order: order,
-        select: select,
+        //select: select,
       }),
       this.auctionRepository.count({ where: filter }),
     ]);
