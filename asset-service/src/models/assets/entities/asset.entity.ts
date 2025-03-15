@@ -1,5 +1,6 @@
 
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Image } from 'src/models/images/entities/image.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class Asset {
@@ -44,5 +45,8 @@ export class Asset {
 
   @Column('timestamp', { nullable: true })
   deleted_at: Date;
+
+  @OneToMany(() => Image, image => image.asset, { cascade: true })
+  images: Image[];
 }
 

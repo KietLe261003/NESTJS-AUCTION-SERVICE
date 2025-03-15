@@ -146,6 +146,36 @@ export class AssetsController {
     return await this.assetsService.update(id, updateAssetDto, file);
   }
 
+  @Post(':id/upload/image')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'Upload an image for an asset' })
+  @ApiConsumes('multipart/form-data')
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the asset to upload an image for',
+    example: 1,
+  })
+  @ApiBody({
+    description: 'Data to upload an image for an asset',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async uploadImage(
+    @Param('id') id: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return await this.assetsService.addImage(id, file);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: number) {
     return this.assetsService.remove(id);

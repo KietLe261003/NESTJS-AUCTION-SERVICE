@@ -7,6 +7,7 @@ import { WarehouseModule } from './models/warehouse/warehouse.module';
 import { InventoriesModule } from './models/inventories/inventories.module';
 import { AssetsModule } from './models/assets/assets.module';
 import { ImageAssetsModule } from './models/image-assets/image-assets.module';
+import { ImagesModule } from './models/images/images.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { ImageAssetsModule } from './models/image-assets/image-assets.module';
     WarehouseModule,
     InventoriesModule,
     AssetsModule,
-    ImageAssetsModule
+    ImageAssetsModule,
+    ImagesModule
   ],
 })
 
