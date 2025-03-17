@@ -36,20 +36,18 @@ export class CreateAssetDto {
   assetPrice: number;
 
   @IsNumber()
-  @IsNotEmpty()
   @ApiProperty({
     description: 'The inspector ID of the asset, (note: check at api-gateway)',
     example: 1
   })
-  inspectorID: number;
+  inspectorID?: number;
 
   @IsString()
-  @IsNotEmpty()
   @ApiProperty({
     description: 'Type ID of asset',
     example: 1
   })
-  assetTypeID: number;
+  assetTypeID?: number;
 
   @IsNumber()
   @IsNotEmpty()
@@ -60,12 +58,11 @@ export class CreateAssetDto {
   assetStatusID: number;
 
   @IsNumber()
-  @IsNotEmpty()
   @ApiProperty({
     description: 'The user ID of the asset',
     example: 1
   })
-  userId: number;
+  userId?: number;
 
   @IsString()
   @IsNotEmpty()

@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Query, Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiBody, ApiConsumes, ApiParam } from '@nestjs/swagger';
-
+import { ApiQuery } from '@nestjs/swagger';
 @Controller('asset-service/assets')
 export class AssetsController {
   constructor(
@@ -75,8 +75,31 @@ export class AssetsController {
     return this.assetsService.create(createAssetDto, file);
   }
 
+
   @Get()
-  findAll() {
+  @ApiOperation({ summary: 'Get a list of auction items' })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Page number for pagination (default: 1)',
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Number of records per page (default: 10)',
+    example: 10,
+  })
+  @Get()
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('filter') filter: any = {},
+    @Query('order') order: any = {},
+    @Query('select') select: any = {}
+  ) {
     return this.assetsService.findAll();
   }
 
@@ -141,43 +164,86 @@ export class AssetsController {
   async update(
     @Param('id') id: number,
     @Body() updateAssetDto: UpdateAssetDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
     return await this.assetsService.update(id, updateAssetDto, file);
   }
 
-  @Post(':id/upload/image')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiOperation({ summary: 'Upload an image for an asset' })
+
+  @Post(':id/upload/images')
+  @UseInterceptors(FilesInterceptor('files')) // Đổi từ FileInterceptor thành FilesInterceptor
+  @ApiOperation({ summary: 'Upload multiple images for an asset' })
   @ApiConsumes('multipart/form-data')
   @ApiParam({
     name: 'id',
     type: 'number',
-    description: 'The ID of the asset to upload an image for',
+    description: 'The ID of the asset to upload images for',
     example: 1,
   })
   @ApiBody({
-    description: 'Data to upload an image for an asset',
+    description: 'Data to upload multiple images for an asset',
     required: true,
     schema: {
       type: 'object',
       properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
+        files: { // Đổi 'file' thành 'files' để khớp với FilesInterceptor
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
         },
       },
     },
   })
-  async uploadImage(
+  async uploadImages(
     @Param('id') id: number,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFiles() files: Express.Multer.File[], // Đổi @UploadedFile thành @UploadedFiles
   ) {
-    return await this.assetsService.addImage(id, file);
+    return await this.assetsService.addImages(id, files); // Cập nhật logic xử lý
   }
+
 
   @Delete(':id')
   remove(@Param('id') id: number) {
     return this.assetsService.remove(id);
+  }
+
+  @Post(':id/approve')
+  @ApiOperation({ summary: 'Approve an asset' })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the asset to approve',
+    example: 1,
+  })
+  async approve(@Param('id') id: number) {
+    return await this.assetsService.approve(id);
+  }
+
+  @Post(':id/reject')
+  @ApiOperation({ summary: 'Reject an asset' })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the asset to reject',
+    example: 1,
+  })
+  @ApiBody({
+    description: 'Data to reject an asset',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        reason: {
+          type: 'string',
+          description: 'The reason for rejecting the asset',
+          example: 'This asset is not suitable for auction.',
+        },
+      },
+    },
+  })
+  async reject(@Param('id') id: number, @Body() body: { reason: string }) {
+    return await this.assetsService.reject(id, body.reason);
   }
 }

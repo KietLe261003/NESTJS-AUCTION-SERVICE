@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Asset } from './entities/asset.entity';
+import { Asset, AssetStatus } from './entities/asset.entity';
 import { Repository } from 'typeorm';
 import { AssetStatusesService } from '../asset-statuses/asset-statuses.service';
 import { AssetTypesService } from '../asset-types/asset-types.service';
@@ -91,20 +91,32 @@ export class AssetsService {
     };
   }
 
-  async update(id: number, updateAssetDto: UpdateAssetDto, file: Express.Multer.File): Promise<{ code: number; message: string; metadata: Asset }> {
-    const asset = await this.assetRepository.findOne({ where: { assetID: id } })
-    if (file) {
-      const filename = await this.fileService.uploadFile(file)
-      await this.fileService.deleteFile(asset.mainImage)
-      updateAssetDto.mainImage = filename
-    }
-    const result = await this.assetRepository.update({ assetID: id }, updateAssetDto);
 
-    if (result.affected === 0) {
+  async update(id: number, updateAssetDto: UpdateAssetDto, file?: Express.Multer.File): Promise<{ code: number; message: string; metadata: Asset }> {
+    const asset = await this.assetRepository.findOne({ where: { assetID: id } });
+
+    if (!asset) {
       throw new NotFoundException(`Asset with ID ${id} not found`);
     }
 
-    const updatedAsset = await this.assetRepository.findOne({ where: { assetTypeID: id } });
+    // Nếu có file mới, upload và thay thế ảnh cũ
+    if (file) {
+      const filename = await this.fileService.uploadFile(file);
+
+      // Xóa ảnh cũ nếu tồn tại
+      if (asset.mainImage) {
+        await this.fileService.deleteFile(asset.mainImage);
+      }
+
+      updateAssetDto.mainImage = filename;
+    }
+
+    await this.assetRepository.save({
+      ...asset,
+      ...updateAssetDto,
+    });
+
+    const updatedAsset = await this.assetRepository.findOne({ where: { assetID: id } });
 
     return {
       code: 200,
@@ -114,25 +126,32 @@ export class AssetsService {
   }
 
 
-  async addImage(id: number, file: Express.Multer.File): Promise<{ code: number; message: string; metadata: Asset }> {
+
+
+  async addImages(id: number, files: Express.Multer.File[]): Promise<{ code: number; message: string; metadata: Asset }> {
     const asset = await this.assetRepository.findOne({ where: { assetID: id }, relations: ['images'] });
     if (!asset) {
       throw new NotFoundException(`Asset with ID ${id} not found`);
     }
 
-    const filename = await this.fileService.uploadFile(file);
+    // Upload từng file và tạo đối tượng Image
+    const uploadedImages = await Promise.all(
+      files.map(async (file) => {
+        const filename = await this.fileService.uploadFile(file);
+        return await this.imagesService.create({ url: filename, asset });
+      })
+    );
 
-    // Tạo đối tượng Image hợp lệ
-    const image = await this.imagesService.create({ url: filename, asset });
-
-    asset.images.push(image); // Thêm image vào danh sách
+    // Thêm tất cả ảnh vào danh sách asset.images
+    asset.images.push(...uploadedImages);
 
     return {
       code: 200,
-      message: 'Image added successfully',
+      message: 'Images added successfully',
       metadata: asset,
     };
   }
+
   async remove(id: number): Promise<{ code: number; message: string; metadata: null }> {
     const result = await this.assetRepository.delete({ assetTypeID: id });
 
@@ -144,6 +163,41 @@ export class AssetsService {
       code: 200,
       message: 'Asset Type deleted successfully',
       metadata: null,
+    };
+  }
+
+  async approve(id: number): Promise<{ code: number; message: string; metadata: Asset }> {
+    const asset = await this.assetRepository.findOne({ where: { assetID: id } });
+    if (!asset) {
+      throw new NotFoundException(`Asset with ID ${id} not found`);
+    }
+
+    asset.status = AssetStatus.AVAILABLE;
+
+    await this.assetRepository.save(asset);
+
+    return {
+      code: 200,
+      message: 'Asset approved successfully',
+      metadata: asset,
+    };
+  }
+
+  async reject(id: number, reason: string): Promise<{ code: number; message: string; metadata: Asset }> {
+    const asset = await this.assetRepository.findOne({ where: { assetID: id } });
+    if (!asset) {
+      throw new NotFoundException(`Asset with ID ${id} not found`);
+    }
+
+    asset.status = AssetStatus.UNAVAILABLE;
+    asset.reason = reason;
+
+    await this.assetRepository.save(asset);
+
+    return {
+      code: 200,
+      message: 'Asset rejected successfully',
+      metadata: asset,
     };
   }
 }
