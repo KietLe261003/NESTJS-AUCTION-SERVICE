@@ -12,7 +12,7 @@ export class AuctionSessionHistory {
   @Column()
   userId: number; // ID của người đấu giá
 
-  @Column("decimal", { precision: 10, scale: 2 })
+  @Column("decimal", { precision: 15, scale: 2 })
   bidAmount: number; // Giá đấu
 
   @CreateDateColumn()
