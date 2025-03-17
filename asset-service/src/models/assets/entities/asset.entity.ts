@@ -7,7 +7,7 @@ export class Asset {
   @PrimaryGeneratedColumn()
   assetID: number;
 
-  @Column()
+  @Column({ nullable: true })
   userID: number; // must check at api-gateway
 
   @Column()
@@ -25,10 +25,10 @@ export class Asset {
   @Column()
   address: string;
 
-  @Column()
+  @Column({ nullable: true })
   inspectorID: number; // must check at api-gateway
 
-  @Column()
+  @Column({ nullable: true })
   assetTypeID: number;
 
   @Column()

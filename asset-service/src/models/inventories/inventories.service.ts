@@ -37,7 +37,7 @@ export class InventoriesService {
     const [result, total] = await this.inventoriesRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
-      where: filter,
+      //where: filter,
       order: order,
     });
 
