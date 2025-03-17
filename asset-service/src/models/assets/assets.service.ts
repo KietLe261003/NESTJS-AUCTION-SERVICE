@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Asset } from './entities/asset.entity';
+import { Asset, AssetStatus } from './entities/asset.entity';
 import { Repository } from 'typeorm';
 import { AssetStatusesService } from '../asset-statuses/asset-statuses.service';
 import { AssetTypesService } from '../asset-types/asset-types.service';
@@ -150,6 +150,41 @@ export class AssetsService {
       code: 200,
       message: 'Asset Type deleted successfully',
       metadata: null,
+    };
+  }
+
+  async approve(id: number): Promise<{ code: number; message: string; metadata: Asset }> {
+    const asset = await this.assetRepository.findOne({ where: { assetID: id } });
+    if (!asset) {
+      throw new NotFoundException(`Asset with ID ${id} not found`);
+    }
+
+    asset.status = AssetStatus.AVAILABLE;
+
+    await this.assetRepository.save(asset);
+
+    return {
+      code: 200,
+      message: 'Asset approved successfully',
+      metadata: asset,
+    };
+  }
+
+  async reject(id: number, reason: string): Promise<{ code: number; message: string; metadata: Asset }> {
+    const asset = await this.assetRepository.findOne({ where: { assetID: id } });
+    if (!asset) {
+      throw new NotFoundException(`Asset with ID ${id} not found`);
+    }
+
+    asset.status = AssetStatus.UNAVAILABLE;
+    asset.reason = reason;
+
+    await this.assetRepository.save(asset);
+
+    return {
+      code: 200,
+      message: 'Asset rejected successfully',
+      metadata: asset,
     };
   }
 }

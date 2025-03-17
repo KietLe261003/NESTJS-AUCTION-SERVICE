@@ -208,4 +208,42 @@ export class AssetsController {
   remove(@Param('id') id: number) {
     return this.assetsService.remove(id);
   }
+
+  @Post(':id/approve')
+  @ApiOperation({ summary: 'Approve an asset' })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the asset to approve',
+    example: 1,
+  })
+  async approve(@Param('id') id: number) {
+    return await this.assetsService.approve(id);
+  }
+
+  @Post(':id/reject')
+  @ApiOperation({ summary: 'Reject an asset' })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the asset to reject',
+    example: 1,
+  })
+  @ApiBody({
+    description: 'Data to reject an asset',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        reason: {
+          type: 'string',
+          description: 'The reason for rejecting the asset',
+          example: 'This asset is not suitable for auction.',
+        },
+      },
+    },
+  })
+  async reject(@Param('id') id: number, @Body() body: { reason: string }) {
+    return await this.assetsService.reject(id, body.reason);
+  }
 }

@@ -2,6 +2,13 @@
 import { Image } from 'src/models/images/entities/image.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
+export enum AssetStatus {
+  AVAILABLE = 'available',
+  SOLD = 'sold',
+  PENDING = 'pending',
+  UNAVAILABLE = 'unavailable',
+}
+
 @Entity()
 export class Asset {
   @PrimaryGeneratedColumn()
@@ -9,6 +16,18 @@ export class Asset {
 
   @Column({ nullable: true })
   userID: number; // must check at api-gateway
+
+  @Column(
+    {
+      type: 'enum',
+      enum: AssetStatus,
+      default: AssetStatus.PENDING,
+    }
+  )
+  status: AssetStatus;
+
+  @Column({ type: 'text', nullable: true })
+  reason?: string;
 
   @Column()
   assetName: string;
@@ -31,7 +50,7 @@ export class Asset {
   @Column({ nullable: true })
   assetTypeID: number;
 
-  @Column()
+  @Column({ nullable: true })
   assetStatusID: number;
 
   @Column({ default: false })
