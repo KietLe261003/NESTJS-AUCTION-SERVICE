@@ -91,20 +91,32 @@ export class AssetsService {
     };
   }
 
-  async update(id: number, updateAssetDto: UpdateAssetDto, file: Express.Multer.File): Promise<{ code: number; message: string; metadata: Asset }> {
-    const asset = await this.assetRepository.findOne({ where: { assetID: id } })
-    if (file) {
-      const filename = await this.fileService.uploadFile(file)
-      await this.fileService.deleteFile(asset.mainImage)
-      updateAssetDto.mainImage = filename
-    }
-    const result = await this.assetRepository.update({ assetID: id }, updateAssetDto);
 
-    if (result.affected === 0) {
+  async update(id: number, updateAssetDto: UpdateAssetDto, file?: Express.Multer.File): Promise<{ code: number; message: string; metadata: Asset }> {
+    const asset = await this.assetRepository.findOne({ where: { assetID: id } });
+
+    if (!asset) {
       throw new NotFoundException(`Asset with ID ${id} not found`);
     }
 
-    const updatedAsset = await this.assetRepository.findOne({ where: { assetTypeID: id } });
+    // Nếu có file mới, upload và thay thế ảnh cũ
+    if (file) {
+      const filename = await this.fileService.uploadFile(file);
+
+      // Xóa ảnh cũ nếu tồn tại
+      if (asset.mainImage) {
+        await this.fileService.deleteFile(asset.mainImage);
+      }
+
+      updateAssetDto.mainImage = filename;
+    }
+
+    await this.assetRepository.save({
+      ...asset,
+      ...updateAssetDto,
+    });
+
+    const updatedAsset = await this.assetRepository.findOne({ where: { assetID: id } });
 
     return {
       code: 200,
@@ -112,6 +124,7 @@ export class AssetsService {
       metadata: updatedAsset,
     };
   }
+
 
 
 

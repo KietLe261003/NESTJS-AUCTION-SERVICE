@@ -164,7 +164,7 @@ export class AssetsController {
   async update(
     @Param('id') id: number,
     @Body() updateAssetDto: UpdateAssetDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
     return await this.assetsService.update(id, updateAssetDto, file);
   }
